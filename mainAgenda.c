@@ -5,17 +5,22 @@ struct pessoa{
     int teleone;
 };
 
-void insere(void *pBuffer,int *quantAdd){
-	int *quantAcumulada;
-	quantAcumulada = pBuffer;
-	
-	printf("%d\n",*quantAcumulada);
-	//printf("%d\n",quantAcumulada);
+void insere(void* pBuffer,int* i,int* quantAdd,int* quantTotal,struct pessoa* pessoas){
+    //*i = 0;
+	(*quantTotal) += (*quantAdd);
+	pBuffer = (void*)realloc(pBuffer,(4*sizeof(int))+((*quantTotal)*(sizeof(struct pessoa))));
 
-	
-    
+    for((*i) = 0;(*i) < (*quantAdd);(*i)++){
+    	printf("Digite o nome da nova pessoa da agenda: ");
+    	scanf("%s",&(*pessoas->nome));
 
-}
+    }
+
+}/*
+void reallocar(void **pBuffer,int *novoTamanho){
+    (*pBuffer) = (void*)realloc(*pBuffer,(*novoTamanho)*(sizeof(struct pessoa)));
+
+}*/
 
 int main(){
 	void *pBuffer;
@@ -23,50 +28,54 @@ int main(){
 	int *j;//pBuffer[1]
 	int *k;//pBuffer[2]
 	int *quantPessoas;//somatorio das n pessoas na agenda! pBuffer[3]
+	struct pessoa *pessoas,*primeiraPessoa;//ponte para o ultimo e para o primeiro
 
 
-    pBuffer = malloc((sizeof(int))+(sizeof(int))+sizeof(int)+sizeof(int));
+    pBuffer = malloc((sizeof(int))+(sizeof(int))+sizeof(int)+sizeof(int)+sizeof(struct pessoa));
     i =(int*) pBuffer;
     j = (int*)i+1;
     k = (int*) j+1;
     quantPessoas = (int*)k+1;
+    pessoas = (struct pessoa*)quantPessoas+1;
+    primeiraPessoa = (struct pessoa*)quantPessoas+1;
     *quantPessoas = 0;
+	*i = 0;
 	
 
-	printf("Digite 1 para add contato ,2 para retirar contado,3 imprimir contatos,4 sair do programa! \n");
-	scanf("%d",&(*i));
+	printf("Digite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
+	scanf("%d",i);
 	while((*i) != 4){
 			switch(*i){
 					case 1:
-						printf("Digite quantos contatoss vc deseja add na agenda: ");
-						scanf("%d",&(*j));
-						
-						insere(pBuffer,j);
-					
-					
+						printf("Digite quantos contatos vc deseja add na agenda: ");
+						scanf("%d",j);
+
+						insere(pBuffer,i,j,quantPessoas,pessoas);
+
+
 					break;
 					case 2:
-					
+
 					break;
-					
+
 					case 3:
-					
+
 					break;
-				
-				
+
+
 			}
-		printf("Digite 1 para add contato ,2 para retirar contado,3 imprimir contatos,4 sair do programa! \n");
-		scanf("%d",&(*i));
-		
-		
-		
-		
+		printf("Digite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
+		scanf("%d",i);
+
+
+
+
 	}
-	
-	
+
+	printf("%s",pessoas->nome);
 
     //printf("I = %d\n",*i);
-    //printf("J = %d\n",*j);
+   // printf("J = %d\n",*k);
 
 
 	free(pBuffer);
