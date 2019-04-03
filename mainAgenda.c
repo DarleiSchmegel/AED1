@@ -13,13 +13,13 @@ void insere(void* pBuffer,int* i,int* quantAdd,int* quantTotal,struct pessoa* pe
     for((*i) = 0;(*i) < (*quantAdd);(*i)++){
     	printf("Digite o nome da nova pessoa da agenda: ");
     	scanf("%s",&(*pessoas->nome));
+    	pessoas++;
 
     }
 
 }/*
 void reallocar(void **pBuffer,int *novoTamanho){
     (*pBuffer) = (void*)realloc(*pBuffer,(*novoTamanho)*(sizeof(struct pessoa)));
-
 }*/
 
 int main(){
@@ -51,15 +51,24 @@ int main(){
 						scanf("%d",j);
 
 						insere(pBuffer,i,j,quantPessoas,pessoas);
-
-
+						*i = 1;
+						
 					break;
 					case 2:
-
+						
+						
 					break;
+						
 
 					case 3:
-
+						printf("Printar");
+						pessoas = primeiraPessoa;
+						
+						for(*i = 1;*i <= *quantPessoas; (*i)++ ){
+							printf("Pessoa numero[%d] = %s\n",*i,pessoas->nome);
+							pessoas++;
+						}
+						pessoas = primeiraPessoa;
 					break;
 
 
@@ -72,7 +81,7 @@ int main(){
 
 	}
 
-	printf("%s",pessoas->nome);
+	//printf("%s",pessoas->nome);
 
     //printf("I = %d\n",*i);
    // printf("J = %d\n",*k);
