@@ -4,87 +4,82 @@ struct pessoa{
     char nome[20];
     int teleone;
 };
+void aponta(void** pBuffer,int** menu,int** i,int** cont){
+    *menu = *pBuffer;
+    *i = *menu+1;
+    *cont = *i+1;
 
-void insere(void* pBuffer,int* i,int* quantAdd,int* quantTotal,struct pessoa* pessoas){
-    //*i = 0;
-	(*quantTotal) += (*quantAdd);
-	pBuffer = (void*)realloc(pBuffer,(4*sizeof(int))+((*quantTotal)*(sizeof(struct pessoa))));
+}
+//insere(pBuffer,i,cont);
+void insere(void* pBuffer,struct pessoa* pessoas){
 
-    for((*i) = 0;(*i) < (*quantAdd);(*i)++){
-    	printf("Digite o nome da nova pessoa da agenda: ");
-    	scanf("%s",&(*pessoas->nome));
-    	pessoas++;
 
-    }
+        printf("Digite os dados a seguir!\n");
+        printf("Nome : ");
+        scanf("%s",&(*pessoas->nome));
+        pessoas = pessoas+1;
 
-}/*
-void reallocar(void **pBuffer,int *novoTamanho){
-    (*pBuffer) = (void*)realloc(*pBuffer,(*novoTamanho)*(sizeof(struct pessoa)));
-}*/
+
+
+}
+
 
 int main(){
-	void *pBuffer;
-	int *i;//pBuffer[0]
-	int *j;//pBuffer[1]
-	int *k;//pBuffer[2]
-	int *quantPessoas;//somatorio das n pessoas na agenda! pBuffer[3]
-	struct pessoa *pessoas,*primeiraPessoa;//ponte para o ultimo e para o primeiro
+    void* pBuffer;
+    int* menu;
+    int* i;
+    int* cont;
+    struct pessoa* pessoas;
 
+    pBuffer = malloc(3*sizeof(int)+sizeof(struct pessoa));
+    aponta(&pBuffer,&menu,&i,&cont);
+    pessoas = cont+1;
+    *cont = 1;
 
-    pBuffer = malloc((sizeof(int))+(sizeof(int))+sizeof(int)+sizeof(int)+sizeof(struct pessoa));
-    i =(int*) pBuffer;
-    j = (int*)i+1;
-    k = (int*) j+1;
-    quantPessoas = (int*)k+1;
-    pessoas = (struct pessoa*)quantPessoas+1;
-    primeiraPessoa = (struct pessoa*)quantPessoas+1;
-    *quantPessoas = 0;
-	*i = 0;
-	
-
-	printf("Digite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
-	scanf("%d",i);
-	while((*i) != 4){
-			switch(*i){
+    printf("Digite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
+    scanf("%d",menu);
+	while((*menu) != 4){
+			switch(*menu){
 					case 1:
-						printf("Digite quantos contatos vc deseja add na agenda: ");
-						scanf("%d",j);
 
-						insere(pBuffer,i,j,quantPessoas,pessoas);
-						*i = 1;
-						
+						pBuffer = realloc(pBuffer,((3*sizeof(int))+(*cont)*sizeof(struct pessoa)));
+
+                        aponta(&pBuffer,&menu,&i,&cont);
+                        pessoas = cont+1;
+
+
+                        insere(pBuffer,pessoas);
+                        (*cont)++;
+
 					break;
 					case 2:
-						
-						
+
+
 					break;
-						
+
 
 					case 3:
-						printf("Printar");
-						pessoas = primeiraPessoa;
-						
-						for(*i = 1;*i <= *quantPessoas; (*i)++ ){
-							printf("Pessoa numero[%d] = %s\n",*i,pessoas->nome);
-							pessoas++;
-						}
-						pessoas = primeiraPessoa;
+						printf("Printando\n");
+						//pessoas = primeiraPessoa;
+
+						/*for(*i = 1;*i <= *quantPessoas; (*i)++ ){
+							printf("Pessoa numero[%d] = %s\n",*i,primeiraPessoa->nome);
+							primeiraPessoa++;
+							//pessoas++;
+						}*/
+						//pessoas = primeiraPessoa;
 					break;
 
 
 			}
 		printf("Digite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
-		scanf("%d",i);
+		scanf("%d",menu);
 
 
 
 
 	}
 
-	//printf("%s",pessoas->nome);
-
-    //printf("I = %d\n",*i);
-   // printf("J = %d\n",*k);
 
 
 	free(pBuffer);
