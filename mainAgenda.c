@@ -15,7 +15,9 @@ void insere(struct pessoa* pessoas){
 
         printf("Digite os dados a seguir!\n");
         printf("Nome : ");
-        scanf("%s",&(*pessoas->nome));
+        getchar();
+        scanf("%s",pessoas->nome);
+        getchar();
         printf("Telefone: ");
         scanf("%d",&pessoas->teleone);
 
@@ -27,39 +29,39 @@ int main(){
     int* menu;
     int* i;
     int* cont;
+
     struct pessoa* pessoas;
 
     pBuffer = malloc(3*sizeof(int));
     aponta(&pBuffer,&menu,&i,&cont);
-    
+
     *cont = 0;
 
-    printf("Digite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
+    printf("\nDigite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n\n");
     scanf("%d",menu);
 	while((*menu) != 4){
 			switch(*menu){
 					case 1:
-						
-                        (*cont)++;
-						pBuffer = realloc(pBuffer,((3*sizeof(int))+(*cont)*sizeof(struct pessoa)));
 
-                        aponta(&pBuffer,&menu,&i,&cont);
-                        pessoas = (struct pessoa*)cont+1;
-                        
-                        if( *cont == 1){
-                        	insere(pessoas);
+            *cont = *cont+1;
+						//pBuffer = realloc(pBuffer,((3*sizeof(int))+(*cont)*sizeof(struct pessoa)));
+            pBuffer = realloc(pBuffer,(sizeof(int)*3+sizeof(struct pessoa)*(*cont)));
+
+            aponta(&pBuffer,&menu,&i,&cont);
+            pessoas = (int*)cont+1;
+
+            if( *cont == 1){
+            insere(pessoas);
 						}
 						else{
-						
-							for(*i = 0 ; *i < *cont ; (*i)++ ){
-								pessoas = pessoas+1;
-							}
-							insere(pessoas);
-                    	}
-                        pessoas = (struct pessoa*)cont+1;
+                for(*i = 1; *i < *cont ;(*i)++) pessoas = pessoas+1;
+                insere(pessoas);
+            }
+            pessoas = (int*)cont+1;
 
 					break;
 					case 2:
+
 
 
 					break;
@@ -67,7 +69,7 @@ int main(){
 
 					case 3:
 						printf("Printando\n");
-						//pessoas = primeiraPessoa;
+						pessoas = (int*)cont+1;
 
 						for(*i = 0;*i < *cont; (*i)++ ){
 							printf("===========\nContato[%d]\n",*i);
@@ -77,12 +79,12 @@ int main(){
 							pessoas = pessoas+1;
 							//pessoas++;
 						}
-						pessoas =(struct pessoa*)cont+1;
+						pessoas = (int*)cont+1;
 					break;
 
 
 			}
-		printf("Digite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
+		printf("\nDigite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
 		scanf("%d",menu);
 
 
