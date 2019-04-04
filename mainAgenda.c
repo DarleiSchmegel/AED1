@@ -11,15 +11,13 @@ void aponta(void** pBuffer,int** menu,int** i,int** cont){
 
 }
 //insere(pBuffer,i,cont);
-void insere(void* pBuffer,struct pessoa* pessoas){
-
+void insere(struct pessoa* pessoas){
 
         printf("Digite os dados a seguir!\n");
         printf("Nome : ");
         scanf("%s",&(*pessoas->nome));
-        pessoas = pessoas+1;
-
-
+        printf("Telefone: ");
+        scanf("%d",&pessoas->teleone);
 
 }
 
@@ -31,25 +29,34 @@ int main(){
     int* cont;
     struct pessoa* pessoas;
 
-    pBuffer = malloc(3*sizeof(int)+sizeof(struct pessoa));
+    pBuffer = malloc(3*sizeof(int));
     aponta(&pBuffer,&menu,&i,&cont);
-    pessoas = cont+1;
-    *cont = 1;
+    
+    *cont = 0;
 
     printf("Digite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
     scanf("%d",menu);
 	while((*menu) != 4){
 			switch(*menu){
 					case 1:
-
+						
+                        (*cont)++;
 						pBuffer = realloc(pBuffer,((3*sizeof(int))+(*cont)*sizeof(struct pessoa)));
 
                         aponta(&pBuffer,&menu,&i,&cont);
-                        pessoas = cont+1;
-
-
-                        insere(pBuffer,pessoas);
-                        (*cont)++;
+                        pessoas = (struct pessoa*)cont+1;
+                        
+                        if( *cont == 1){
+                        	insere(pessoas);
+						}
+						else{
+						
+							for(*i = 0 ; *i < *cont ; (*i)++ ){
+								pessoas = pessoas+1;
+							}
+							insere(pessoas);
+                    	}
+                        pessoas = (struct pessoa*)cont+1;
 
 					break;
 					case 2:
@@ -62,12 +69,15 @@ int main(){
 						printf("Printando\n");
 						//pessoas = primeiraPessoa;
 
-						/*for(*i = 1;*i <= *quantPessoas; (*i)++ ){
-							printf("Pessoa numero[%d] = %s\n",*i,primeiraPessoa->nome);
-							primeiraPessoa++;
+						for(*i = 0;*i < *cont; (*i)++ ){
+							printf("===========\nContato[%d]\n",*i);
+							printf("Nome = %s\n",pessoas->nome);
+							printf("Numero = %d\n",pessoas->teleone);
+							printf("===========\n");
+							pessoas = pessoas+1;
 							//pessoas++;
-						}*/
-						//pessoas = primeiraPessoa;
+						}
+						pessoas =(struct pessoa*)cont+1;
 					break;
 
 
@@ -86,3 +96,4 @@ int main(){
 
 	return 0;
 }
+
