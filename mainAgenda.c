@@ -4,13 +4,12 @@ struct pessoa{
     char nome[20];
     int teleone;
 };
-void aponta(void** pBuffer,int** menu,int** i,int** cont){
+void aponta(void** pBuffer,int** menu,int** i,int** cont,char** nome){
     *menu = *pBuffer;
     *i = *menu+1;
     *cont = *i+1;
-
+    *nome = *cont+1;
 }
-//insere(pBuffer,i,cont);
 void insere(struct pessoa* pessoas){
 
         printf("Digite os dados a seguir!\n");
@@ -22,18 +21,31 @@ void insere(struct pessoa* pessoas){
         scanf("%d",&pessoas->teleone);
 
 }
+void deleta(struct pessoa *lista,char* rNome,int* i,int *cont){
+	for (*i = 0; *i < *cont; (*i)++){
+		printf("pessoa[%d] = %s\n",*i,lista->nome);
+	}
+}
 
+struct pessoa *retornaLugar(struct pessoa* pessoas,char *rNome,int* i,int* cont){
+	for(*i = 0; *i < *cont;(*i)++){
+		if(pessoas->nome == rNome) return pessoas;
+		pessoas = pessoas+1;
+	}
+	return NULL;
+}
 
 int main(){
     void* pBuffer;
     int* menu;
     int* i;
     int* cont;
+    char *xNome;
 
     struct pessoa* pessoas;
 
-    pBuffer = malloc(3*sizeof(int));
-    aponta(&pBuffer,&menu,&i,&cont);
+    pBuffer = malloc(3*sizeof(int)+(sizeof(char)*20));
+    aponta(&pBuffer,&menu,&i,&cont,&xNome);
 
     *cont = 0;
 
@@ -43,33 +55,37 @@ int main(){
 			switch(*menu){
 					case 1:
 
-            *cont = *cont+1;
+            			*cont = *cont+1;
 						//pBuffer = realloc(pBuffer,((3*sizeof(int))+(*cont)*sizeof(struct pessoa)));
-            pBuffer = realloc(pBuffer,(sizeof(int)*3+sizeof(struct pessoa)*(*cont)));
+           			 	pBuffer = realloc(pBuffer,(sizeof(int)*3+sizeof(struct pessoa)*(*cont)));
 
-            aponta(&pBuffer,&menu,&i,&cont);
-            pessoas = (int*)cont+1;
+            			aponta(&pBuffer,&menu,&i,&cont,&xNome);
+            			pessoas =(char*)xNome+(sizeof(char)*20);
 
-            if( *cont == 1){
-            insere(pessoas);
+            			if( *cont == 1){
+            				insere(pessoas);
 						}
 						else{
-                for(*i = 1; *i < *cont ;(*i)++) pessoas = pessoas+1;
-                insere(pessoas);
-            }
-            pessoas = (int*)cont+1;
+               				for(*i = 1; *i < *cont ;(*i)++) pessoas = pessoas+1;
+                			insere(pessoas);
+            			}
+            			pessoas =(char*)xNome+(sizeof(char)*20);
 
 					break;
 					case 2:
-
-
-
+						printf("Digite o nome que vc deseja remover: \n");
+						scanf("%s",xNome);
+						pessoas = (pessoas,xNome,i,cont);
+						//deleta(pessoas,i,cont);
+						if(pessoas == NULL) printf("Este contato nao esta na agenda!!!\n"); 
+						pessoas =(char*)xNome+(sizeof(char)*20);
+						
 					break;
 
 
 					case 3:
 						printf("Printando\n");
-						pessoas = (int*)cont+1;
+						pessoas =(char*)xNome+(sizeof(char)*20);
 
 						for(*i = 0;*i < *cont; (*i)++ ){
 							printf("===========\nContato[%d]\n",*i);
@@ -79,23 +95,15 @@ int main(){
 							pessoas = pessoas+1;
 							//pessoas++;
 						}
-						pessoas = (int*)cont+1;
+						pessoas =(char*)xNome+(sizeof(char)*20);
 					break;
 
 
 			}
 		printf("\nDigite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
 		scanf("%d",menu);
-
-
-
-
 	}
-
-
-
 	free(pBuffer);
 
 	return 0;
 }
-
