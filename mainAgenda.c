@@ -1,25 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
-struct pessoa{
-    char nome[20];
-    int teleone;
-};
-void aponta(void** pBuffer,int** menu,int** i,int** cont,char** nome){
-    *menu = *pBuffer;
-    *i = *menu+1;
-    *cont = *i+1;
-    *nome = *cont+1;
-}
-void insere(struct pessoa* pessoas){
+#define MAX 25
+#define TMAX 15
+typedef struct pessoa{
+    char nome[MAX];
+    char telefone[TMAX];
+}tPessoa;
+typedef struct variaveis{
+	int menu;
+	int i;
+	int cont;
+	int tamanhoPbuffer;
+	char auxNome[MAX];
+}tVariaveis;
 
+
+tVariaveis *var;
+tPessoa *pessoas;
+
+
+void insere(struct pessoa* pessoas){
+		getchar();
         printf("Digite os dados a seguir!\n");
         printf("Nome : ");
-        getchar();
-        scanf("%s",pessoas->nome);
-        getchar();
+        fgets(pessoas->nome, MAX, stdin);
+        
         printf("Telefone: ");
-        scanf("%d",&pessoas->teleone);
-
+        fgets(pessoas->telefone, TMAX, stdin);
 }
 void deleta(struct pessoa *lista,char* rNome,int* i,int *cont){
 	for (*i = 0; *i < *cont; (*i)++){
@@ -37,71 +44,56 @@ struct pessoa *retornaLugar(struct pessoa* pessoas,char *rNome,int* i,int* cont)
 
 int main(){
     void* pBuffer;
-    int* menu;
-    int* i;
-    int* cont;
-    char *xNome;
+	
 
-    struct pessoa* pessoas;
-
-    pBuffer = malloc(3*sizeof(int)+(sizeof(char)*20));
-    aponta(&pBuffer,&menu,&i,&cont,&xNome);
-
-    *cont = 0;
+    pBuffer = malloc(sizeof(struct variaveis));
+	var = pBuffer;
+	var->cont = 0;
 
     printf("\nDigite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n\n");
-    scanf("%d",menu);
-	while((*menu) != 4){
-			switch(*menu){
+    scanf("%d",&var->menu);
+
+	while(var->menu != 4){
+			switch(var->menu){
 					case 1:
+						var->cont = var->cont+1;
+						var->tamanhoPbuffer = (sizeof(struct variaveis)) + (var->cont * sizeof(struct pessoa));
 
-            			*cont = *cont+1;
-						//pBuffer = realloc(pBuffer,((3*sizeof(int))+(*cont)*sizeof(struct pessoa)));
-           			 	pBuffer = realloc(pBuffer,(sizeof(int)*3+sizeof(struct pessoa)*(*cont)));
+           			 	pBuffer = realloc(pBuffer,var->tamanhoPbuffer);
 
-            			aponta(&pBuffer,&menu,&i,&cont,&xNome);
-            			pessoas =(char*)xNome+(sizeof(char)*20);
+           			 	var = pBuffer;
+           			 	pessoas = pBuffer+(var->tamanhoPbuffer - sizeof(struct pessoa));
 
-            			if( *cont == 1){
-            				insere(pessoas);
-						}
-						else{
-               				for(*i = 1; *i < *cont ;(*i)++) pessoas = pessoas+1;
-                			insere(pessoas);
-            			}
-            			pessoas =(char*)xNome+(sizeof(char)*20);
+            			insere(pessoas);
 
 					break;
 					case 2:
-						printf("Digite o nome que vc deseja remover: \n");
+
+						/*printf("Digite o nome que vc deseja remover: \n");
 						scanf("%s",xNome);
 						pessoas = (pessoas,xNome,i,cont);
 						//deleta(pessoas,i,cont);
 						if(pessoas == NULL) printf("Este contato nao esta na agenda!!!\n"); 
-						pessoas =(char*)xNome+(sizeof(char)*20);
+						pessoas =(char*)xNome+(sizeof(char)*20);*/
 						
 					break;
 
 
 					case 3:
-						printf("Printando\n");
-						pessoas =(char*)xNome+(sizeof(char)*20);
+						printf("Listando...\n");
+						pessoas = pBuffer + (sizeof(struct variaveis));
 
-						for(*i = 0;*i < *cont; (*i)++ ){
-							printf("===========\nContato[%d]\n",*i);
-							printf("Nome = %s\n",pessoas->nome);
-							printf("Numero = %d\n",pessoas->teleone);
-							printf("===========\n");
-							pessoas = pessoas+1;
-							//pessoas++;
+						for(var->i = 1;var->i <= var->cont; (var->i)++ ){
+							printf("===========================\nContato[%d]\n",var->i);
+							printf("Nome   = %s",pessoas->nome);
+							printf("Numero = %s",pessoas->telefone);
+							printf("===========================\n");
+							pessoas = pBuffer + (sizeof(struct variaveis) + ((var->i) * sizeof(struct pessoa)));
 						}
-						pessoas =(char*)xNome+(sizeof(char)*20);
 					break;
-
-
 			}
 		printf("\nDigite! \n1 para add contato ,\n2 para retirar contado,\n3 imprimir contatos,\n4 sair do programa! \n");
-		scanf("%d",menu);
+		scanf("%d",&var->menu);
 	}
 	free(pBuffer);
 
